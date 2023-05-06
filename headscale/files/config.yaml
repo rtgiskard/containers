@@ -1,0 +1,67 @@
+---
+server_url: https://your.hs.dn:8080
+listen_addr: 0.0.0.0:8080
+
+metrics_listen_addr: 127.0.0.1:9090
+grpc_listen_addr: 127.0.0.1:50443
+grpc_allow_insecure: false
+
+# Unix socket used for the CLI to connect without authentication
+unix_socket: /run/headscale/headscale.sock
+unix_socket_permission: "0770"
+
+# for headscale <-> tailscale: with or without Noise-based protocol
+private_key_path: /var/lib/headscale/cert/private.key
+noise:
+  private_key_path: /var/lib/headscale/cert/noise_private.key
+
+# TLS
+tls_cert_path: "/var/lib/headscale/cert/cert.pem"
+tls_key_path: "/var/lib/headscale/cert/key.pem"
+
+# need to be within IP ranges supported by the tailscale client
+ip_prefixes:
+  - fd7a:115c:a1e0::/48
+  - 100.64.0.0/10
+
+derp:
+  server:
+    # set to false to disable derp and stun
+    enabled: true
+    stun_listen_addr: "0.0.0.0:3478"
+
+    region_id: 996
+    region_code: "hs_pri"
+    region_name: "HS Private DERP"
+
+  ## external DERP maps
+  paths: []
+  urls:
+    - https://controlplane.tailscale.com/derpmap/default
+
+  auto_update_enabled: true
+  update_frequency: 24h
+
+node_update_check_interval: 10s
+ephemeral_node_inactivity_timeout: 30m
+disable_check_updates: false
+
+# SQLite config
+db_type: sqlite3
+db_path: /var/lib/headscale/data/db.sqlite
+
+acl_policy_path: ""
+randomize_client_port: false
+
+log:
+  format: text
+  level: info
+
+dns_config:
+  override_local_dns: false
+  nameservers: []
+  domains: []
+  magic_dns: false
+
+logtail:
+  enabled: false
